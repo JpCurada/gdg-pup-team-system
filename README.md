@@ -118,21 +118,37 @@ Required Python packages (see requirements.txt)
 
 ### Installation
 
+1.  **Clone the repository:**
+    ```bash
+    git clone [https://github.com/gdg-pup/data-ml-system.git](https://github.com/gdg-pup/data-ml-system.git)
+    ```
+2.  **Navigate to the project directory:**
+    ```bash
+    cd data-ml-system
+    ```
+3.  **Create and activate a virtual environment:**
+    ```bash
+    python -m venv venv
+    .\venv\Scripts\activate  # On Windows
+    # source venv/bin/activate # On macOS and Linux
+    ```
+4.  **Upgrade pip (if necessary):**
+    ```bash
+    python -m pip install --upgrade pip
+    ```
+5.  **Install dependencies:**
+    ```bash
+    pip install -r requirements.txt
+    ```
+
+## Google API Credentials
+
+1.  Download your `credentials.json` file from the Google Cloud Console.
+2.  Place the `credentials.json` file in the root directory of the project.
+
+## Running the Application
+
 ```bash
-# Clone this repository
-git clone https://github.com/gdg-pup/data-ml-system.git
-
-# Navigate to the project directory
-cd data-ml-system
-
-# Install dependencies
-pip install -r requirements.txt
-
-# Configure Google API credentials
-# 1. Download credentials.json from Google Cloud Console
-# 2. Place in project root directory
-
-# Run the application
 streamlit run app.py
 ```
 
