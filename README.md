@@ -141,11 +141,36 @@ streamlit run app.py
 <div align="center">
   <table>
     <tr>
-      <td align="center"><img src="https://github.com/identicons/jdoe.png" width="100px;" alt=""/><br /><sub><b>John Paul Curada</b></sub></td>
-      <td align="center"><img src="https://github.com/identicons/jsmith.png" width="100px;" alt=""/><br /><sub><b>Jen Patrick Nataba</b></sub></td>
-      <td align="center"><img src="https://github.com/identicons/sjohnson.png" width="100px;" alt=""/><br /><sub><b>Redd Lawrence Reyes</b></sub></td>
-      <td align="center"><img src="https://github.com/identicons/mwilliams.png" width="100px;" alt=""/><br /><sub><b>Gavin Deposoy</b></sub></td>
-      <td align="center"><img src="https://github.com/identicons/tbrown.png" width="100px;" alt=""/><br /><sub><b>John Ferry Lagman</b></sub></td>
+      <td align="center">
+        <a href="https://github.com/JpCurada">
+          <img src="https://github.com/JpCurada.png" width="100px;" alt=""/>
+          <br /><sub><b>John Paul Curada</b></sub>
+        </a>
+      </td> 
+      <td align="center">
+        <a href="https://github.com/cytojen">
+          <img src="https://github.com/cytojen.png" width="100px;" alt=""/>
+          <br /><sub><b>Jen Patrick Nataba</b></sub>
+        </a>
+      </td> 
+      <td align="center">
+        <a href="https://github.com/thatjohnlagman">
+          <img src="https://github.com/thatjohnlagman.png" width="100px;" alt=""/>
+          <br /><sub><b>John Ferry Lagman</b></sub>
+        </a>
+      </td>
+      <td align="center">
+        <a href="https://github.com/definitelynotredd">
+          <img src="https://github.com/definitelynotredd.png" width="100px;" alt=""/>
+          <br /><sub><b>Redd Lawrence Reyes</b></sub>
+        </a>
+      </td>
+      <td align="center">
+        <a href="https://github.com/paisenpai">
+          <img src="https://github.com/paisenpai.png" width="100px;" alt=""/>
+          <br /><sub><b>John Gavin Deposoy</b></sub>
+        </a>
+      </td>
     </tr>
   </table>
 </div>
