@@ -126,6 +126,8 @@ git clone https://github.com/gdg-pup/data-ml-system.git
 cd data-ml-system
 
 # Install dependencies
+python -m pip install --upgrade pip
+
 pip install -r requirements.txt
 
 # Configure Google API credentials
