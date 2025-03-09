@@ -39,16 +39,16 @@ def show_xparky():
         st.error(f"Error fetching xp_points data: {str(e)}")
         return
 
-    # Merge the users and XParky points data
+    # Merge the users and XParky points data, left join to include all users
     try:
         merged_df = pd.merge(
             users_df,
             xp_points_df,
             on='student_number',
-            how='left'  # Left join to include all users
+            how='left'  
         )
 
-        # Handle missing values: fill missing points with 0 and missing names with default values
+        # Handle missing values, fill missing points with 0 and missing names with default values
         merged_df['xparky'] = merged_df['xparky'].fillna(0).astype(int)
         merged_df['first_name'] = merged_df['first_name'].fillna('Unknown')
         merged_df['last_name'] = merged_df['last_name'].fillna('Student')
@@ -76,14 +76,33 @@ def show_xparky():
 
     # Display the dataframe without the index column
     if not merged_df.empty:
-        # Reset the index and drop it from the DataFrame
-        merged_df_display = merged_df[['First Name', 'Last Name', 'XParky Points']].reset_index(drop=True)
-
-        # Hide index
-        st.dataframe(merged_df_display, use_container_width=True, hide_index=True)
-
+        # Create a copy of the dataframe to use for display
+        display_df = merged_df.copy()
+        
+        # Define the maximum XParky points
+        MAX_XPARKY_POINTS = 2000
+        
+        # Store the original XParky points values
+        original_points = display_df['XParky Points'].copy()
+        
+        # Use st.column_config to customize the XParky Points column with progress bars
+        st.dataframe(
+            display_df,
+            column_config={
+                "XParky Points": st.column_config.ProgressColumn(
+                    "XParky Points",
+                    help="XParky points earned out of 2000 maximum",
+                    format="%d",
+                    min_value=0,
+                    max_value=MAX_XPARKY_POINTS,
+                ),
+            },
+            hide_index=True,
+            use_container_width=True,
+        )
+        
         # Button to download the merged data as CSV
-        csv = merged_df_display.to_csv(index=False)
+        csv = merged_df.to_csv(index=False)
         st.download_button(
             label="Download CSV",
             data=csv,
