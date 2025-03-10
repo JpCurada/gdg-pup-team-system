@@ -21,7 +21,7 @@ sh = gc.open_by_key(st.secrets.gsheets.sheets_id)
 
 sh = gc.open_by_key(os.getenv("sheets_id"))
 
-sheet_names = ["users", "events", "xp_points", "submission", "activities", "certificates"]
+sheet_names = ["users", "events", "xp_points", "submission", "activities", "certificates", "event_participated"]
 
 def get_data_ls_dict(sheet_name: str):
     """
