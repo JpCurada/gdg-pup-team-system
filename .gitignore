@@ -34,12 +34,7 @@ wheels/
 *.egg
 
 # Credentials and secrets
-credentials.json
-client_secret*.json
-*.pem
-token.pickle
-token.json
-
+.streamlit\secrets.toml
 
 # System files
 .DS_Store
