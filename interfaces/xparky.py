@@ -67,8 +67,8 @@ def xparky_page():
                 'xparky': 'XParky Points',
             })
 
-            # Sort by XParky points in descending order
-            merged_df = merged_df[['First Name', 'Last Name', 'XParky Points']].sort_values('XParky Points', ascending=False).reset_index(drop=True)
+            # Sort by Last Name alphabetically
+            merged_df = merged_df[['First Name', 'Last Name', 'XParky Points']].sort_values('Last Name', ascending=True).reset_index(drop=True)
 
         except Exception as e:
             st.error(f"Error merging data: {str(e)}")
