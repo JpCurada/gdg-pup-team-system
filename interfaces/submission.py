@@ -1,4 +1,4 @@
 import streamlit as st
 
-def show_submission():
+def submission_page():
     st.header("Submission")

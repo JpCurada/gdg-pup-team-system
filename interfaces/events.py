@@ -219,7 +219,7 @@ def show_past_events(df):
     st.markdown('</div>', unsafe_allow_html=True)
 
     
-def show_events():
+def events_page():
     df = ss.get_data_df("events")
     
     # Extract only the date part from the 'datetime' column
