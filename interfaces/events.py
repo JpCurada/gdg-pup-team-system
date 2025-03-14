@@ -157,28 +157,12 @@ def show_past_events(df):
         st.markdown("<h3 style='text-align: center; color: white;'>No past events available.</h3>", unsafe_allow_html=True)
         return  # Exit early if no past events
     
-    # Common CSS that doesn't need to be repeated
+    # Common CSS for styling with improved button positioning
     st.markdown("""
     <style>
-    .st-emotion-cache-ocqkz7 {
-        padding-left: 5%;
-        padding-right: 5%;
-        display: flex;
-        flex-wrap: wrap;
-        -webkit-box-flex: 1;
-        flex-grow: 1;
-        -webkit-box-align: stretch;
-        margin-bottom: 25px;
-        align-items: stretch;
-        gap: 1rem;
-    }     
-
     .past-events-section {
         width: 100%;
         margin-bottom: 40px;
-    }
-    .st-emotion-cache-1cvow4s a {
-        text-decoration: none;
     }
     .past-events-header {
         text-align: center;
@@ -188,146 +172,109 @@ def show_past_events(df):
         font-weight: bold;
         color: white;
     }
-    
-    /* Desktop-specific styles */
-    @media (min-width: 992px) {
-        .event-card-container {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 1rem;
-        }
+    .st-emotion-cache-ocqkz7 {
+        margin: 0px 5rem;
     }
-
-    /* Tablet-specific styles */
-    @media (min-width: 768px) and (max-width: 991px) {
-        .event-card-container {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 1rem;
-        }
+    .st-emotion-cache-qcpnpn {
+        background: #212121;
+        min-height: 375px;
+        position: relative !important;
     }
-
-    /* Mobile-specific styles */
-    @media (max-width: 767px) {
-        .event-card-container {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 1rem;
-        }
-        .st-emotion-cache-ocqkz7 {
-            padding-left: 10px;
-            padding-right: 10px;
-        }
-        .past-events-header {
-            margin: 30px 15px 40px 15px;
-            font-size: 1.8em;
-        }
+    .st-emotion-cache-qcpnpn:hover {
+        transform: scale(1.05) !important;
+    }
+    /* Make sure the button covers everything */
+    div[data-testid="stButton"] {
+        position: absolute !important;
+        top: 0 !important;
+        left: 0 !important;
+        width: 100% !important;
+        height: 100% !important;
+        z-index: 999 !important;
+    }
+    div[data-testid="stButton"] > button {
+        width: 100% !important;
+        height: 100% !important;
+        opacity: 0 !important;
+        cursor: pointer !important;
     }
     </style>
     """, unsafe_allow_html=True)
 
     # Start past events section
     st.markdown('<div class="past-events-section">', unsafe_allow_html=True)
-
-    # Header for Past Events
     st.markdown('<div class="past-events-header">PAST EVENTS</div>', unsafe_allow_html=True)
-
-    # Define grid columns based on screen width
-    # Check if we have screen width in session state
-    if 'screen_width' in st.session_state and st.session_state.screen_width < 768:
-        num_columns = 1  # Single column on mobile
-    elif 'screen_width' in st.session_state and st.session_state.screen_width < 992:
-        num_columns = 2  # Two columns on tablets
-    else:
-        num_columns = 4  # Default to desktop view
-        
+    
     past_events_list = past_events.to_dict(orient="records")
-
-    # Start the event card container
-    st.markdown('<div class="event-card-container">', unsafe_allow_html=True)
-
-    # Display event cards
-    for row in range(0, len(past_events_list), num_columns):
-        cols = st.columns(num_columns)
-        
-        for i, (col, event) in enumerate(zip(cols, past_events_list[row:row + num_columns])):
-            with col:
-                # Load the card template for this specific event
-                img = Image.open("static/images/gdg_card.png").convert("RGB")
-                draw = ImageDraw.Draw(img)
-
-                max_line_char = 922 // (32 // 2) + 5 # Estimate of max character per line
-                if len(event['title']) > max_line_char:
-                    y = 453  # Text needs multiple lines
-                else:
-                    y = 472  # Text fits in one line
-
-                # Draw text for this specific event
-                draw_text(
-                    draw, 
-                    text=event['title'],
-                    x=88, 
-                    y=y, 
-                    width=922, 
-                    font_size=32, 
-                    font_name="medium", 
-                    scale=1,
-                    multiline=True
-                )
-                
-                # Convert image to a base64-encoded data URL directly
-                buffered = BytesIO()
-                img.save(buffered, format="PNG")
-                img_str = base64.b64encode(buffered.getvalue()).decode()
-                card_data_url = f"data:image/png;base64,{img_str}"
-                
-                # Create unique key for this button
-                unique_key = f"event_{row}_{i}"
-                
-                # Apply custom styling for this specific card
-                st.markdown(f"""
-                <style>
-                .st-key-{unique_key} button {{
-                    width: 100%;
-                    height: 100%;
-                    background-color: transparent;
-                    border: 2px solid #333;
-                    border-radius: 10px;
-                    overflow: hidden;
-                    cursor: pointer;
-                    transition: transform 0.3s ease;
-                    padding: 0;
-                    display: block;
-                    position: relative;
-                    min-height: 255px;
-                    background-image: url('{card_data_url}');
-                    background-size: cover;
-                    background-position: center;
-                }}
-                
-                .st-key-{unique_key} button:hover {{
-                    transform: scale(1.05);
-                    background-color: rgba(255, 255, 255, 0.2);
-                }}
-                
-                .st-key-{unique_key} button p {{
-                    display: none;
-                }}
-                
-                /* Fix for mobile display */
-                @media (max-width: 768px) {{
-                    .st-key-{unique_key} button {{
-                        min-height: 200px;
-                    }}
-                }}
-                </style>
-                """, unsafe_allow_html=True)
+    
+    # Create a container for all events
+    with st.container(border=False):
+        # Process events in groups of 4 for each row
+        for i in range(0, len(past_events_list), 4):
+            # Create a row with 4 columns
+            cols = st.columns(4)
             
-                if st.button("", key=unique_key):
-                    show_event_details(event)
+            # Fill each column with an event
+            for j, col in enumerate(cols):
+                if i + j < len(past_events_list):
+                    event = past_events_list[i + j]
+                    
+                    with col:
+                        # Create a unique key for this event
+                        unique_key = f"event_{i}_{j}"
+                        
+                        # Create a container with position relative
+                        with st.container(border=True, key=unique_key):
+                            # Add custom CSS for this specific container
+                            st.markdown(f"""
+                            <style>
+                            .st-key-{unique_key} {{
+                                background-color: #212121 !important;
+                                color: white !important;
+                                max-height: 500px !important;
+                                display: flex !important;
+                                flex-direction: column !important;
+                                justify-content: center !important;
+                                align-items: center !important;
+                                text-align: center !important;
+                                cursor: pointer !important;
+                                position: relative !important;
+                                z-index: 1 !important;
+                            }}
+                            .st-key-btn_{unique_key} {{
+                                position: absolute !important;
+                                top: 0 !important;
+                                left: 0 !important;
+                                width: 100% !important;
+                                height: 100% !important;
+                                z-index: 999 !important;
+                            }}
+                            .st-key-btn_{unique_key} button {{
+                                width: 100% !important;
+                                height: 100% !important;
+                                opacity: 0 !important;
+                                cursor: pointer !important;
+                                position: absolute !important;
+                                top: 0 !important;
+                                left: 0 !important;
+                            }}
+                            </style>
+                            """, unsafe_allow_html=True)
+                            
+                            # Content first (lower z-index)
+                            st.markdown(f"<div class='event-title'>{event['title']}</div>", unsafe_allow_html=True)
+                            st.image("static/images/gdg_card.png", use_container_width=False)
+                            st.markdown(f"<div class='event-date'>{event['datetime']}</div>", unsafe_allow_html=True)
+                            
+                            # Button last (higher z-index)
+                            # This empty space ensures the button is rendered after the content
+                            st.markdown("<div style='height: 1px;'></div>", unsafe_allow_html=True)
+                            if st.button(" ", key=f"btn_{unique_key}"):
+                                show_event_details(event)
+
     # Close section wrapper
     st.markdown('</div>', unsafe_allow_html=True)
-
+    
 def events_page():
     # First detect screen width for responsive layout
     detect_screen_width()
