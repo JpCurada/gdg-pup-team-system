@@ -19,7 +19,6 @@ credentials = {
 gc = gspread.service_account_from_dict(credentials)
 sh = gc.open_by_key(st.secrets.gsheets.sheets_id)
 
-sh = gc.open_by_key(os.getenv("sheets_id"))
 
 sheet_names = ["users", "events", "xp_points", "submission", "activities", "certificates", "event_participated"]
 
