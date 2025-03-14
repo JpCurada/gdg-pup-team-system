@@ -143,15 +143,25 @@ def display_event(event):
     </div>
     """, unsafe_allow_html=True)
 
-@st.dialog("Event Details")
+@st.dialog("Event Details", width="large")
 def show_event_details(event):
-    st.video("https://www.youtube.com/watch?v=dQw4w9WgXcQ")
+    # Add custom CSS to center the dialog and increase its width
+    st.markdown("""
+    <style>
+    div[data-testid="stDialog"] div[role="dialog"] {
+        width: 50vw !important;  
+        height: auto !important;
+        margin-top: 40px;
+    }
+    </style>
+    """, unsafe_allow_html=True)
+    
+    st.video(event["link"])
     st.write(f"## {event['title']}")
-    st.write(f"**Date:** {event['datetime']}")
-    st.write(f"**Type:** {event['type']}")
-    st.write(f"**Description:** {event['description']}")
-    # Add any other event details you want to display
-
+    st.write(event['datetime'])
+    st.write(event['type'])
+    st.write(event['description'])
+   
 def show_past_events(df):
     # Filter only past events
     past_events = df[df['status'] == 'Done']
