@@ -66,7 +66,10 @@ def display_event(event):
         font-size: 1em;
         margin-right: 15px;
     }
-    
+    .st-emotion-cache-1cvow4s a {
+    color: rgb(46, 154, 255);
+    text-decoration: none;
+    }
     /* Mobile responsive styles */
     @media (max-width: 768px) {
         .event-container {
