@@ -49,3 +49,16 @@ def home_page():
                 st.image(img_path, use_container_width=True)
                 st.write(f"**{name}**")
             
+    st.markdown("""
+        <style>
+        .st-emotion-cache-t1wise {
+            width: 100%;
+            padding: 1rem 5rem 1rem 5rem;
+            max-width: initial;
+            min-width: auto;
+        }
+        .st-emotion-cache-h4xjwg {
+            max-height: 0px
+        }
+        </style>
+        """, unsafe_allow_html=True)
