@@ -9,7 +9,6 @@ from io import BytesIO
 import base64
 from streamlit_js_eval import streamlit_js_eval
 
-# Add this at the top of your script to detect screen width
 def detect_screen_width():
     # Get screen width using streamlit_js_eval
     width = streamlit_js_eval(js_expressions='window.innerWidth', want_output=True)
@@ -18,8 +17,8 @@ def detect_screen_width():
     if width is not None:
         st.session_state.screen_width = width
     elif 'screen_width' not in st.session_state:
-        st.session_state.screen_width = 1200  # Default fallback
-
+        st.session_state.screen_width = 1200  
+        
 def display_event(event):
     st.markdown("""
     <style>
@@ -107,7 +106,7 @@ def display_event(event):
         event_header = "UPCOMING EVENT"
         button_text = "RSVP NOW"
         button_color = "blue"
-    else:  # When event is "Done"
+    else:
         event_header = "LATEST EVENT"
         button_text = "VIEW DETAILS"
         button_color = "#505050"
@@ -118,7 +117,7 @@ def display_event(event):
     # Ensure the link is valid
     event_link = event.get("link", "#").strip()
 
-    # Button HTML (always show "View Details" for Done events)
+    # Always show "View Details" for Done events
     event_button_html = f'''
     <div class="event-button-container">
         <a href="{event_link}" class="event-button" style="background-color: {button_color}; color: white;">
@@ -145,7 +144,6 @@ def display_event(event):
 
 @st.dialog("Event Details", width="large")
 def show_event_details(event):
-    # Add custom CSS to center the dialog and increase its width
     st.markdown("""
     <style>
     div[data-testid="stDialog"] div[role="dialog"] {
@@ -168,9 +166,8 @@ def show_past_events(df):
     
     if past_events.empty:
         st.markdown("<h3 style='text-align: center; color: white;'>No past events available.</h3>", unsafe_allow_html=True)
-        return  # Exit early if no past events
+        return  
     
-    # Common CSS for styling with improved button positioning
     st.markdown("""
     <style>
     .past-events-section {
@@ -244,7 +241,6 @@ def show_past_events(df):
                         
                         # Create a container with position relative
                         with st.container(border=True, key=unique_key):
-                            # Add custom CSS for this specific container
                             st.markdown(f"""
                             <style>
                             .st-key-{unique_key} {{
