@@ -173,7 +173,13 @@ def show_past_events(df):
         color: white;
     }
     .st-emotion-cache-ocqkz7 {
-        margin: 0px 5rem;
+        display: flex;
+        flex-wrap: wrap;
+        -webkit-box-flex: 1;
+        flex-grow: 1;
+        -webkit-box-align: stretch;
+        align-items: stretch;
+        gap: 1rem;      
     }
     .st-emotion-cache-qcpnpn {
         background: #212121;
@@ -296,5 +302,18 @@ def events_page():
         latest_event = df.head(1)
         display_event(latest_event.iloc[0])
     
-    # Add Past Events section
+    st.markdown("""
+    <style>
+    .st-emotion-cache-t1wise {
+        width: 100%;
+        padding: 1rem 5rem 1rem 5rem;
+        max-width: initial;
+        min-width: auto;
+    }
+    .st-emotion-cache-h4xjwg {
+        max-height: 0px
+    }
+    </style>
+    """, unsafe_allow_html=True)
+
     show_past_events(df)
