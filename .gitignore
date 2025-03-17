@@ -34,7 +34,7 @@ wheels/
 *.egg
 
 # Credentials and secrets
-.streamlit\secrets.toml
+.streamlit/secrets.toml
 
 # System files
 .DS_Store
