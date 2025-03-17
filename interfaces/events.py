@@ -280,7 +280,12 @@ def show_past_events(df):
                             st.markdown(f"<div class='event-title'>{event['title']}</div>", unsafe_allow_html=True)
                             st.image("static/images/gdg_card.png", use_container_width=False)
                             st.markdown(f"<div class='event-date'>{event['datetime']}</div>", unsafe_allow_html=True)
-                            
+                            # Check if the title is shorter than or equal to 40 characters, and if so, add a newline before the date
+                            if len(event['title']) <= 41:
+                                st.markdown(f"<div class='event-date'><br>{event['datetime']}</div>", unsafe_allow_html=True)
+                            else:
+                                st.markdown(f"<div class='event-date'>{event['datetime']}</div>", unsafe_allow_html=True)
+                                
                             # Button last (higher z-index)
                             # This empty space ensures the button is rendered after the content
                             st.markdown("<div style='height: 1px;'></div>", unsafe_allow_html=True)
