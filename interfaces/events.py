@@ -1,12 +1,6 @@
 import streamlit as st
 import pandas as pd
-import os
 import services.sheets_service as ss
-from PIL import Image, ImageDraw, ImageFont
-import streamlit.components.v1 as components
-from utils.image_drawer import draw_text
-from io import BytesIO
-import base64
 from streamlit_js_eval import streamlit_js_eval
 
 def detect_screen_width():
