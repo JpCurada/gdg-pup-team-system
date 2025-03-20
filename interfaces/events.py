@@ -1,6 +1,12 @@
 import streamlit as st
 import pandas as pd
+import os
 import services.sheets_service as ss
+from PIL import Image, ImageDraw, ImageFont
+import streamlit.components.v1 as components
+from utils.image_drawer import draw_text
+from io import BytesIO
+import base64
 from streamlit_js_eval import streamlit_js_eval
 
 def detect_screen_width():
@@ -273,13 +279,12 @@ def show_past_events(df):
                             # Content first (lower z-index)
                             st.markdown(f"<div class='event-title'>{event['title']}</div>", unsafe_allow_html=True)
                             st.image("static/images/gdg_card.png", use_container_width=False)
-                            
                             # Check if the title is shorter than or equal to 40 characters, and if so, add a newline before the date
                             if len(event['title']) <= 41:
                                 st.markdown(f"<div class='event-date'><br>{event['datetime']}</div>", unsafe_allow_html=True)
                             else:
                                 st.markdown(f"<div class='event-date'>{event['datetime']}</div>", unsafe_allow_html=True)
-
+                            
                             # Button last (higher z-index)
                             # This empty space ensures the button is rendered after the content
                             st.markdown("<div style='height: 1px;'></div>", unsafe_allow_html=True)
@@ -310,18 +315,3 @@ def events_page():
         latest_event = df.head(1)
         display_event(latest_event.iloc[0])
     
-    st.markdown("""
-    <style>
-    .st-emotion-cache-t1wise {
-        width: 100%;
-        padding: 1rem 5rem 1rem 5rem;
-        max-width: initial;
-        min-width: auto;
-    }
-    .st-emotion-cache-h4xjwg {
-        max-height: 0px
-    }
-    </style>
-    """, unsafe_allow_html=True)
-
-    show_past_events(df)
