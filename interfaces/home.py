@@ -4,7 +4,7 @@ from utils.shortcuts import show_image
 def home_page(): 
     _, home_col, _ = st.columns([1,7,1])
     with home_col:
-        show_image("static\\images\\landing-banner-3d.png")
+        show_image("static/images/landing-banner-3d.png")
 
         st.header("Google Developer Group On Campus - Polytechnic University of the Philippines")
         about = '''
@@ -31,11 +31,11 @@ def home_page():
         st.subheader("Development Team")
 
         image_paths = [
-            "static\\images\\jp.jpg",
-            "static\\images\\jen.jpg",
-            "static\\images\\ferry.png",
-            "static\\images\\redd.jpg",
-            "static\\images\\gavin.jpg",
+            "static/images/jp.jpg",
+            "static/images/jen.jpg",
+            "static/images/ferry.png",
+            "static/images/redd.jpg",
+            "static/images/gavin.jpg",
         ]
 
 
@@ -48,8 +48,4 @@ def home_page():
             with col:
                 st.image(img_path, use_container_width=True)
                 st.write(f"**{name}**")
-<<<<<<< HEAD
             
-=======
-            
->>>>>>> 623bc1f7d6906b23a4417189b5a8082b551053ed

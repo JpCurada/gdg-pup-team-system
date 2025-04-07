@@ -314,9 +314,5 @@ def events_page():
         # If no 'Upcoming' events exist, show the latest event regardless of status
         latest_event = df.head(1)
         display_event(latest_event.iloc[0])
-<<<<<<< HEAD
     
     show_past_events(df)
-=======
-    
->>>>>>> 623bc1f7d6906b23a4417189b5a8082b551053ed

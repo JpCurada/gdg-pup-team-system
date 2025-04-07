@@ -6,7 +6,7 @@ from utils.shortcuts import show_image
 def xparky_page():
     _, xparky_col, _ = st.columns([1,7, 1])
     with xparky_col:
-        show_image("static\\images\\xparky-banner.svg")
+        show_image("static/images/xparky-banner.svg")
 
         # Define the columns we need
         columns_users = ['first_name', 'last_name', 'student_number']
@@ -110,9 +110,5 @@ def xparky_page():
                 mime="text/csv"
             )
         else:
-<<<<<<< HEAD
             st.write("No data available for the search.")
             
-=======
-            st.write("No data available for the search.")
->>>>>>> 623bc1f7d6906b23a4417189b5a8082b551053ed

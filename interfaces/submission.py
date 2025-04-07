@@ -148,6 +148,13 @@ def submission_page():
 
             # Display user details and submission form when logged in
             st.header(f"Welcome, {st.session_state.user_data.get('first_name', 'User')}!")
+
+            # Add logout button in the same row as the header
+            col_header, col_logout = st.columns([3, 1])
+            with col_logout:
+                if st.button("Logout", key="logout_button"):
+                    logout()
+
             activities_data = ss.get_data_ls_dict("activities")
 
             # Create 4 columns for the activities

@@ -13,5 +13,5 @@ def show_image(image_path):
     # Apply the rounded-image class to a container
     with st.container():
         st.markdown('<div class="rounded-image">', unsafe_allow_html=True)
-        st.image(f"{image_path}", use_container_width=True)
+        st.image(rf"{image_path}", use_container_width=True)
         st.markdown('</div>', unsafe_allow_html=True)

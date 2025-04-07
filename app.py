@@ -9,12 +9,17 @@ st.set_page_config(
     initial_sidebar_state="collapsed"
 )
 
+# Use forward slashes for paths to ensure compatibility with Docker
 parent_dir = os.path.dirname(os.path.abspath(__file__))
-logo_path = os.path.join(parent_dir, "static\images\logo.png")
+css_path = os.path.join(parent_dir, "static", "styles.css")
+logo_path = os.path.join(parent_dir, "static", "images", "logo.png")
 
-# Load custom CSS
-with open(os.path.join(parent_dir, "static\styles.css")) as css:
-    st.markdown(f'<style>{css.read()}</style>', unsafe_allow_html=True)
+# Load custom CSS with error handling
+try:
+    with open(css_path) as css:
+        st.markdown(f'<style>{css.read()}</style>', unsafe_allow_html=True)
+except FileNotFoundError:
+    st.warning(f"CSS file not found at: {css_path}")
 
 # Define your pages
 home = st.Page(page=pg.home_page, title='Home')
@@ -27,9 +32,18 @@ submission = st.Page(page=pg.submission_page, title='Submission')
 pg = st.navigation([home, events, certificates, xparky, submission], position="hidden")
 
 # Create a top navigation bar with right alignment
-left_section,_, right_section = st.columns([2,3, 3], gap='small', vertical_alignment='center')
+left_section, _, right_section = st.columns([2, 3, 3], gap='small', vertical_alignment='center')
 
-left_section.image("static\images\logo.png")
+# Use try/except for image loading to handle potential errors
+try:
+    left_section.image(logo_path)
+except FileNotFoundError:
+    st.warning(f"Logo not found at: {logo_path}")
+    # Fallback to relative path as a second attempt
+    try:
+        left_section.image("static/images/logo.png")
+    except:
+        left_section.write("Logo not available")
 
 with right_section:
     nav_cols = st.columns(5)

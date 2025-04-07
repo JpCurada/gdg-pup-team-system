@@ -58,9 +58,5 @@ def certificates_page():
                             on_click="ignore"
                         )
             else:
-<<<<<<< HEAD
                 st.warning('You have not yet participated in any of our events', icon="ℹ️")
 
-=======
-                st.warning('You have not yet participated in any of our events', icon="ℹ️")
->>>>>>> 623bc1f7d6906b23a4417189b5a8082b551053ed

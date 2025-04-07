@@ -1,0 +1,7 @@
+[theme]
+base='dark'
+backgroundColor="#030303"
+
+[server]
+fileWatcherType = "poll"
+enableStaticServing = true
