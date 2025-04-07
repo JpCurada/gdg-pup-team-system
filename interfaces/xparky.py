@@ -110,5 +110,9 @@ def xparky_page():
                 mime="text/csv"
             )
         else:
+<<<<<<< HEAD
             st.write("No data available for the search.")
             
+=======
+            st.write("No data available for the search.")
+>>>>>>> 623bc1f7d6906b23a4417189b5a8082b551053ed

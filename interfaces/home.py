@@ -48,4 +48,8 @@ def home_page():
             with col:
                 st.image(img_path, use_container_width=True)
                 st.write(f"**{name}**")
+<<<<<<< HEAD
             
+=======
+            
+>>>>>>> 623bc1f7d6906b23a4417189b5a8082b551053ed
