@@ -311,18 +311,4 @@ def events_page():
         latest_event = df.head(1)
         display_event(latest_event.iloc[0])
     
-    st.markdown("""
-    <style>
-    .st-emotion-cache-t1wise {
-        width: 100%;
-        padding: 1rem 5rem 1rem 5rem;
-        max-width: initial;
-        min-width: auto;
-    }
-    .st-emotion-cache-h4xjwg {
-        max-height: 0px
-    }
-    </style>
-    """, unsafe_allow_html=True)
-
     show_past_events(df)
