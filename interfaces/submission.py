@@ -33,14 +33,13 @@ def authenticate_user(student_number, password):
             if db_student_number == student_number and db_password == password:
                 st.session_state.user_data = user
                 st.query_params.logged_in = "True"
-                st.session_state.is_guest = True
+                st.session_state.is_guest = False
                 st.query_params.student_id = student_number
                 return True
         return False
     except Exception as e:
         st.error(f"Authentication error: {str(e)}")
         return False
-
 
 def logout():
     try:
@@ -58,7 +57,7 @@ def guest_sign_in():
     # Sign in as guest
     st.session_state.logged_in = True
     st.session_state.user_data = {"student_number": "Guest"}
-    st.session_state.is_guest = False
+    st.session_state.is_guest = True
     st.session_state.error_message = None
 
 
