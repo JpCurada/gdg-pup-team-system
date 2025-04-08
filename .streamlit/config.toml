@@ -5,3 +5,4 @@ backgroundColor="#030303"
 [server]
 fileWatcherType = "poll"
 enableStaticServing = true
+maxUploadSize = 30
