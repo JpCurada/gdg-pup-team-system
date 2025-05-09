@@ -296,20 +296,32 @@ def submission_page():
             st.session_state.logged_in = False
             st.rerun()
 
-        # Add a fixed position logout button above the activities section
+        st.markdown("<div style='height: 30px;'></div>", unsafe_allow_html=True)
+    
+        # Create a centered container for the logout button
         st.markdown("""
         <style>
-        .logout-button {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            z-index: 999;
+        div[data-testid="column"]:has(div[data-testid="stButton"] button:contains("Logout")) {
+            text-align: center;
+        }
+        div[data-testid="stButton"] button:contains("Logout") {
+            background-color: #ff4b4b;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            padding: 0.5rem 1rem;
+            font-size: 0.9rem;
+            display: inline-block;
+            width: auto !important;
         }
         </style>
         """, unsafe_allow_html=True)
 
-        if st.button("Logout", key="logout_button", help="Click to logout", use_container_width=True):
-            logout()
+        # Create a centered layout
+        col1, col2, col3 = st.columns([4, 1, 4])
+        with col2:
+            if st.button("Logout", key="logout_button", help="Click to logout"):
+                logout()
 
         # Show activities section below the fixed logout button
         df = ss.get_data_df("activities")
