@@ -19,7 +19,7 @@ credentials = {
 gc = gspread.service_account_from_dict(credentials)
 sh = gc.open_by_key(st.secrets.gsheets.sheets_id)
 
-sheet_names = ["users", "events", "xp_points", "submission", "activities", "certificates", "event_participated"]
+sheet_names = ["users", "events", "xp_points", "submissions", "activities", "certificates", "event_participated"]
 
 def get_data_ls_dict(sheet_name: str):
     """
@@ -68,3 +68,48 @@ def get_data_df(sheet_name: str, columns_to_access: list[str] = None):
     except Exception as e:
         return f"An error occurred: {str(e)}"
     
+
+def update_row_by_key(sheet_name: str, key_field: str, key_value: str, updated_row_dict: dict):
+    """
+    Updates a specific row in the sheet where the key_field equals key_value with updated_row_dict.
+
+    Args:
+        sheet_name (str): The name of the sheet.
+        key_field (str): The column name to match.
+        key_value (str): The value to look for in key_field.
+        updated_row_dict (dict): The updated row data as a dictionary.
+    """
+    try:
+        if sheet_name.lower() in sheet_names:
+            worksheet = sh.worksheet(sheet_name)
+            data = worksheet.get_all_records()
+            headers = worksheet.row_values(1)
+
+            for i, row in enumerate(data):
+                if str(row.get(key_field)) == str(key_value):
+                    row_values = [updated_row_dict.get(header, "") for header in headers]
+                    worksheet.update(f"A{i + 2}", [row_values])
+                    return True
+        return False
+    except Exception as e:
+        return f"Error updating row: {str(e)}"
+
+
+def add_row(sheet_name: str, row_dict: dict):
+    """
+    Appends a new row to the specified sheet using values from row_dict.
+
+    Args:
+        sheet_name (str): The name of the sheet.
+        row_dict (dict): A dictionary of values to append.
+    """
+    try:
+        if sheet_name.lower() in sheet_names:
+            worksheet = sh.worksheet(sheet_name)
+            headers = worksheet.row_values(1)
+            row_values = [row_dict.get(header, "") for header in headers]
+            worksheet.append_row(row_values)
+            return True
+        return False
+    except Exception as e:
+        return f"Error adding row: {str(e)}"

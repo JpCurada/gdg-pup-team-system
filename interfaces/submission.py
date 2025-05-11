@@ -60,7 +60,6 @@ def guest_sign_in():
     st.session_state.is_guest = True
     st.session_state.error_message = None
 
-
 @st.dialog("Activity Details", width="large")
 def show_activity_details(activity):
     st.markdown("""
@@ -78,13 +77,11 @@ def show_activity_details(activity):
     </style>
     """, unsafe_allow_html=True)
 
-    st.write(f"## {activity['activity-name']}")
-    st.markdown(activity["description-markdown"], unsafe_allow_html=True)
-    st.write(f"**Instructions:** {activity['instructions']}")
-    st.write(f"### Start Date: {activity['start-date']}")
-    st.write(f"### Deadline: {activity['deadline']}")
+    st.write(f"## {activity['activity_name']}")
+    st.markdown(activity["instructions_markdown"], unsafe_allow_html=True)
+    st.write(f"### Start Date: {activity['start_date']}")
+    st.write(f"### Deadline: {activity['due_date']}")
     st.write(f"**XP Points:** {activity['xp_points']}")
-
 
     # Check if the user is signed in as a guest before proceeding
     if st.session_state.get("is_guest", False):
@@ -101,36 +98,86 @@ def show_activity_details(activity):
                 logout()  
     else:
         student_number = st.session_state.user_data.get("student_number", "unknown")
+        activity_name = activity["activity_name"]  # Get activity name
+        folder_name = activity_name  # Create folder based on activity name
 
-        folder_name = activity["activity-name"]  # Create folder based on activity name
+        # Check for existing submission and feedback in the submissions table
+        try:
+            submissions_data = ss.get_data_ls_dict("submissions")
+            
+            if submissions_data is None:
+                submissions_data = []
 
-        # Check if the user has already submitted the file
-        existing_file_link = search_file(folder_name, student_number)
+            existing_submission = None
+            
+            # Check if there's an existing submission
+            for submission in submissions_data:
+                if (str(submission.get("student-number")) == str(student_number) and 
+                    submission.get("activity-id") == activity_name):
+                    existing_submission = submission
+                    break
 
-        if existing_file_link:
-            st.success(f"✅ You have already submitted this activity! [View Submission]({existing_file_link})")
-        else:
-            uploaded_file = st.file_uploader("Upload a file", type=["pdf", "ipynb"])
+            # If submission exists, show feedback if available
+            if existing_submission:
+                # Display the submission link and feedback
+                submission_link = existing_submission.get("submission_link")
+                feedback = existing_submission.get("feedback", "No feedback yet.")  # Default if no feedback
 
-            if uploaded_file is not None:
-                with st.form(key="submit_form", border=False):
-                    submit_button = st.form_submit_button("Submit File")
+                st.success(f"✅ You have already submitted this activity! [View Submission]({submission_link})")
+                st.info(f"### Feedback from instructor:\n{feedback}")
+            else:
+                uploaded_file = st.file_uploader("Upload a file", type=["pdf", "ipynb"])
 
-                    if submit_button:
-                        file_link = upload_file(uploaded_file, folder_name, student_number)
-                        if file_link:
-                            st.success(f"File submitted successfully! [View File]({file_link})")
-                            st.session_state.uploaded_file = uploaded_file
-                            st.session_state.file_link = file_link
-                            st.empty() 
-                        else:
-                            st.error("File upload failed. Please try again.")
+                if uploaded_file is not None:
+                    with st.form(key="submit_form", border=False):
+                        submit_button = st.form_submit_button("Submit File")
+
+                        if submit_button:
+                            file_link = upload_file(uploaded_file, folder_name, student_number)
+                            if file_link:
+                                st.success(f"File submitted successfully! [View File]({file_link})")
+                                st.session_state.uploaded_file = uploaded_file
+                                st.session_state.file_link = file_link
+                                
+                                # Update XP points table
+                                try:
+                                    current_time = time.strftime("%Y-%m-%d %H:%M:%S")
+                                    xp_data = ss.get_data_ls_dict("xp_points")
+
+                                    for row in xp_data:
+                                        if str(row["student_number"]) == student_number:
+                                            row["xparky"] = str(int(row.get("xparky", 0)) + int(activity["xp_points"]))
+                                            row["last_updated"] = current_time
+                                            ss.update_row_by_key("xp_points", "student_number", student_number, row)
+                                            break
+                                        
+                                    # Add submission to submissions table
+                                    try:
+                                        new_submission = {
+                                            "submission-id": f"{student_number}_{activity_name}_{current_time}",
+                                            "student-number": student_number,
+                                            "activity-id": activity_name,
+                                            "submission_link": file_link,
+                                            "submission_datetime": current_time,
+                                            "feedback": ""  # Initialize with empty feedback
+                                        }
+                                        
+                                        ss.add_row("submissions", new_submission)
+                                        st.success("Submission recorded successfully!")
+                                    except Exception as e:
+                                        st.warning(f"Submission succeeded but couldn't be recorded in database: {str(e)}")
+                                    
+                                except Exception as e:
+                                    st.warning(f"Submission succeeded, but update failed: {str(e)}")
+
+        except Exception as e:
+            st.error(f"Error retrieving submissions data: {str(e)}")
 
 
     
 
 def show_activities(df):
-    activities = df[df['deadline'] < pd.Timestamp.now()]
+    activities = df[df['due_date'] < pd.Timestamp.now()]
 
     if activities.empty:
         st.markdown("<h3 style='text-align: center; color: white;'>No activities available.</h3>", unsafe_allow_html=True)
@@ -235,13 +282,13 @@ def show_activities(df):
                             </style>
                             """, unsafe_allow_html=True)
                             
-                            st.markdown(f"<div class='activity-title'>{activity['activity-name']}</div>", unsafe_allow_html=True)
+                            st.markdown(f"<div class='activity-title'>{activity['activity_name']}</div>", unsafe_allow_html=True)
                             st.image("static/images/gdg_card.png", use_container_width=False)
                             
-                            if len(activity['activity-name']) <= 41:
-                                st.markdown(f"<div class='activity-date'><br>{activity['start-date']}</div>", unsafe_allow_html=True)
+                            if len(activity['activity_name']) <= 41:
+                                st.markdown(f"<div class='activity-date'><br>{activity['start_date']}</div>", unsafe_allow_html=True)
                             else:
-                                st.markdown(f"<div class='activity-date'>{activity['start-date']}</div>", unsafe_allow_html=True)
+                                st.markdown(f"<div class='activity-date'>{activity['start_date']}</div>", unsafe_allow_html=True)
                             
                             st.markdown("<div style='height: 1px;'></div>", unsafe_allow_html=True)
                             if st.button(" ", key=f"btn_{unique_key}"):
@@ -325,8 +372,8 @@ def submission_page():
 
         # Show activities section below the fixed logout button
         df = ss.get_data_df("activities")
-        df["start-date"] = pd.to_datetime(df["start-date"].str.extract(r'(\w+ \d{1,2}, \d{4})')[0], errors="coerce")
-        df["deadline"] = pd.to_datetime(df["deadline"].str.extract(r'(\w+ \d{1,2}, \d{4})')[0], errors="coerce")
-        df = df.sort_values(by="start-date", ascending=False)
+        df["start_date"] = pd.to_datetime(df["start_date"].str.extract(r'(\w+ \d{1,2}, \d{4})')[0], errors="coerce")
+        df["due_date"] = pd.to_datetime(df["due_date"].str.extract(r'(\w+ \d{1,2}, \d{4})')[0], errors="coerce")
+        df = df.sort_values(by="start_date", ascending=False)
         show_activities(df)
 
